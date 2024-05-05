@@ -1,41 +1,35 @@
-from PyPDF2 import PdfReader
 from dotenv import dotenv_values
-from openai import OpenAI
 from argparse import ArgumentParser
-from funcs import gpt_parse, analyse, write_result
 
+from PDFAnalyser import PDFAnalyser
+
+
+# Get user args
 parser = ArgumentParser()
 parser.add_argument('PDF_path')
 parser.add_argument('--result_path', '-r')
 parser.add_argument('--model', '-m', default='gpt-4')
 args = parser.parse_args()
 
-# Read in file
-print('Loading PDF..')
-reader = PdfReader(args.PDF_path)
-pages_raw = [page.extract_text() for page in reader.pages]
-pages = [' '.join(page.split('\n')) for page in pages_raw]
-
-# Set up OpenAI client
+# Construct the PDF parser
 api_key = dotenv_values()['OPENAI_KEY']
-client = OpenAI(
-    api_key=api_key,
+pdfa = PDFAnalyser(
+    args.PDF_path,
+    api_key, 
+    args.model
 )
 
 # Parse the text
-print('Parsing with ChatGPT. This may take a few seconds..')
-completion = gpt_parse(pages, client, args.model)
-parsed = completion.choices[0].message.content
+print('Sending data to ChatGPT. This may take a few seconds..')
+pdfa.gpt_parse()#skip_api_call=True)
 
 # Analyse
 print('Analysing text..')
-out = analyse(parsed)
+pdfa.analyse()
 
 # Save results or print to console
 print('Saving..')
-out['file_path'] = args.PDF_path
-out['model'] = args.model
 if args.result_path:
-    write_result(out, args.result_path)
+    pdfa.write_result(args.result_path)
 else:
-    print(out)
+    print(pdfa.result)
