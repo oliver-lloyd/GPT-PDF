@@ -11,17 +11,19 @@ parser.add_argument('--result_path', '-r')
 parser.add_argument('--model', '-m', default='gpt-4')
 args = parser.parse_args()
 
+env = dotenv_values()
+
 # Construct the PDF parser
-api_key = dotenv_values()['OPENAI_KEY']
 pdfa = PDFAnalyser(
     args.PDF_path,
-    api_key, 
+    env['OPENAI_KEY'],
+    env['SYSTEM_PROMPT'],
     args.model
 )
 
 # Parse the text
 print('Sending data to ChatGPT. This may take a few seconds..')
-pdfa.gpt_parse()#skip_api_call=True)
+pdfa.gpt_parse()
 
 # Analyse
 print('Analysing text..')
