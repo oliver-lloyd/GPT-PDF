@@ -14,10 +14,13 @@ args = parser.parse_args()
 env = dotenv_values()
 
 # Construct the PDF parser
+with open('system_prompt.txt', 'r') as f:
+    sys_prompt = f.read()
+
 pdfa = PDFAnalyser(
     args.PDF_path,
     env['OPENAI_KEY'],
-    env['SYSTEM_PROMPT'],
+    sys_prompt,
     args.model
 )
 
