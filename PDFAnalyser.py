@@ -40,15 +40,7 @@ class PDFAnalyser:
             'file': self.PDF_path,
             'model': self.model
         }
-        """
-        lines_raw = self.parsed_text.split('\n')
-        self.lines = [line_ for line_ in lines_raw if len(line_)]  # Remove empty lines
-        self.words = []
-        for line_ in self.lines:
-            self.words += line_.split(' ')
-        """
         word_count = int(self.parsed_text.split(' ')[-1])
-        #self.result['num_lines'] = len(self.lines)
         self.result['num_words'] = word_count
 
 

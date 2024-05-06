@@ -1,6 +1,6 @@
-# PDF text parser using Chat GPT
+# PDF word counter using Chat GPT
 
-A Python program to parse the text inside of a PDF file, returning some relevant statistics if desired. Current functionality is very basic (prog simply gets line and word counts of the file) but more will be added soon.
+A Python program to parse the text inside of a PDF file using the OpenAI API, returning the word count.
 
 ## Requirements
 Python libraries:
